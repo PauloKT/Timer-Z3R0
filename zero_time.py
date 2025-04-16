@@ -4,9 +4,10 @@ import random
 from colors import colors, color_list
 
 class Bomb:
-    def __init__(self, wires, timer):
-        self.wires = wires
-        self.timer = timer
+    def __init__(self, difficulty):
+        self.difficulty = difficulty
+        self.wires = [] 
+        self.timer = 60 # vai depender da dificuldade
         self.is_defused = False
         self.exploded = False
 
@@ -18,19 +19,12 @@ class Bomb:
            wires_order.append(color_list[i])
 
         random.shuffle(wires_order)
+
+        self.wires = wires_order
         
         for i in wires_order:
             print(i['code'], '|')
 
 
-        
-
-class Bomb_One(Bomb):
-    def __init__(self, wires, timer):
-        super().__init__(wires, timer)
-
-    def defuse(self):
-        pass
-
-bomb = Bomb([], 0)
+bomb = Bomb(1)
 bomb.show_wires()
