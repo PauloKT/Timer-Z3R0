@@ -7,6 +7,9 @@ from colors import colors
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+def color_print(text, color_name):
+    print(f"{colors[color_name]}{text}{colors["BRANCO"]}")
+
 class Bomb:
     def __init__(self, difficulty):
         self.difficulty = difficulty
@@ -25,13 +28,13 @@ class Bomb:
             if option in self.wires:
                 print(f"Fio {colors[option]}{option}{colors["BRANCO"]} cortado!")
                 if option == self.correct_wire:
-                    print(f"{colors["VERDE"]}Boa lek, acertou{colors["BRANCO"]}")
+                    color_print("Boa lek, acertou", "VERDE")
                     self.wire_completed = True
                 else:
-                    print(f"{colors["VERMELHO"]}Porra lek, errou{colors["BRANCO"]}")
+                    color_print("Porra lek, errou", "VERMELHO")
                 self.wires.remove(option)
             else:
-                print(f"{colors["VERMELHO"]}O doidão, essa cor nem existe{colors["BRANCO"]}")
+                color_print("O doidão, essa cor nem existe", "VERMELHO")
 
             if len(self.wires) > 0 and not self.wire_completed:
                 self.show_wires()
@@ -49,7 +52,7 @@ class Bomb:
         self.wires = wires_colors[:wires_amount] # Corta a lista até o número inteiro
 
     def show_wires(self):
-        print(f"{colors[self.correct_wire]}[TESTE] O fio que precisa ser cortado é o {str.capitalize(self.correct_wire)}")
+        color_print(f"[TESTE] O fio que precisa ser cortado é o {str.capitalize(self.correct_wire)}", self.correct_wire)
         for _ in range(5):
             row = ""
             for colorName in self.wires:
