@@ -18,6 +18,17 @@ class Wire:
 
     # Método para cortar o fio
     def cut(self):
+        for i in range(5):  # Tesoura se move 5 vezes
+            clear()  # Limpa o terminal para simular movimento
+            print("Cortando fio... \n")
+
+            print(f'{" " * (4 - i)}✂️')
+            for _ in range(5):
+                print(f'{colors["NEGRITO"]} {self.colorCode}|{colors["BRANCO"]}')
+
+            sleep(0.2)
+        # Após a animação, o fio é cortado
+        clear()
         print(f"Fio {colors['NEGRITO']}{self.colorCode}{self.colorName}{colors['BRANCO']} cortado!")
         self.cutted = True  # Marca o fio como cortado
         return self
@@ -27,44 +38,37 @@ class Bomb:
     def __init__(self, difficulty):
         self.difficulty = difficulty  # Nível de dificuldade da bomba
         self.wires = {}  # Dicionário para armazenar os fios
-        self.wiresCompleted = False  # Indica se a bomba foi desarmada
+        self.wiresCompleted = False  # Indica se o desafio dos fios foi completo
 
     # Método principal para iniciar a lógica da bomba
     def start(self):
         self.initialize_wires()  # Inicializa os fios da bomba
         self.show_wires()  # Mostra os fios no terminal
 
-        while True:
+        while not self.wiresCompleted:
             # Solicita ao jogador que escolha um fio para cortar
             option = input("Qual fio você vai cortar?\nResposta: ").upper()
             clear()  # Limpa o terminal após a entrada do jogador
 
-            selectedWire = None
             # Verifica se o fio escolhido existe
-            for wire in self.wires.values():
-                if wire.colorName == option:
-                    selectedWire = wire
+            selectedWire = next((wire for wire in self.wires.values() if wire.colorName == option), None)
 
-            if selectedWire:
+            if not selectedWire:
+                color_print("O doidão, essa cor nem existe", "VERMELHO")
+            elif selectedWire.cutted:
+                color_print("Esse fio já está cortado", "VERMELHO")
+            else:
                 selectedWire.cut()  # Corta o fio escolhido
 
-                # Verifica se o fio cortado é o correto
                 if selectedWire.isCorrectWire:
                     color_print("Boa lek, acertou", "VERDE")
                     self.wiresCompleted = True  # Marca a bomba como desarmada
+                    break  # Sai do loop, pois a bomba foi desarmada
                 else:
                     color_print("Porra lek, errou", "VERMELHO")
 
-                # Remove o fio cortado da lista de fios
-                del self.wires[selectedWire.colorName]
-            else:
-                color_print("O doidão, essa cor nem existe", "VERMELHO")
-
-            # Continua mostrando os fios até que a bomba seja desarmada
-            if not self.wiresCompleted:
-                self.show_wires()
-            else:
-                break
+            # Mostra os fios após cada interação
+            self.show_wires()
 
     # Método para inicializar os fios da bomba
     def initialize_wires(self):
@@ -85,10 +89,14 @@ class Bomb:
 
     # Método para exibir os fios no terminal
     def show_wires(self):
-        for _ in range(5):  # Exibe os fios 5 vezes para simular um efeito visual
+        for i in range(5):  # Exibe os fios 5 vezes para simular um efeito visual
             row = ""
             for wire in self.wires.values():
-                row += f'{colors["NEGRITO"]} {wire.colorCode}| {colors["BRANCO"]}'
+                if wire.cutted == True and i == 2:
+                    row += f'{colors["NEGRITO"]} {wire.colorCode}  {colors["BRANCO"]}'
+                else:
+                    row += f'{colors["NEGRITO"]} {wire.colorCode}| {colors["BRANCO"]}'
+
             print(row)
 
 # Início do programa
