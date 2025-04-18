@@ -6,7 +6,8 @@ from colors import colors, color_print  # Para manipular cores no terminal
 
 # Função para limpar o terminal
 def clear():
-    system('cls' if name == 'nt' else 'clear')  # 'cls' para Windows, 'clear' para outros sistemas
+    # 'cls' para Windows, 'clear' para outros sistemas
+    system('cls' if name == 'nt' else 'clear')
 
 # Classe que representa um fio da bomba
 class Wire:
@@ -18,19 +19,20 @@ class Wire:
 
     # Método para cortar o fio
     def cut(self):
-        for i in range(5):  # Tesoura se move 5 vezes
-            clear()  # Limpa o terminal para simular movimento
+        # Simula o movimento da tesoura cortando o fio
+        for i in range(5):
+            clear()
             print("Cortando fio... \n")
-
             print(f'{" " * (4 - i)}✂️')
             for _ in range(5):
                 print(f'{colors["NEGRITO"]} {self.colorCode}|{colors["BRANCO"]}')
+            sleep(0.5)
 
-            sleep(0.2)
         # Após a animação, o fio é cortado
         clear()
         print(f"Fio {colors['NEGRITO']}{self.colorCode}{self.colorName}{colors['BRANCO']} cortado!")
         self.cutted = True  # Marca o fio como cortado
+        sleep(1)
         return self
 
 # Classe que representa a bomba
@@ -38,39 +40,39 @@ class Bomb:
     def __init__(self, difficulty):
         self.difficulty = difficulty  # Nível de dificuldade da bomba
         self.wires = {}  # Dicionário para armazenar os fios
-        self.wiresCompleted = False  # Indica se o desafio dos fios foi completo
+        self.wiresCompleted = False  # Indica se o desafio dos fios foi concluído
 
     # Método principal para iniciar a lógica da bomba
     def start(self):
-        self.initialize_wires()  # Inicializa os fios da bomba
+        self.initialize_wires()  # Configura os fios da bomba
         self.show_wires()  # Mostra os fios no terminal
 
         while not self.wiresCompleted:
             # Solicita ao jogador que escolha um fio para cortar
             option = input("Qual fio você vai cortar?\nResposta: ").upper()
-            clear()  # Limpa o terminal após a entrada do jogador
+            clear()
 
             # Verifica se o fio escolhido existe
             selectedWire = next((wire for wire in self.wires.values() if wire.colorName == option), None)
 
             if not selectedWire:
-                color_print("O doidão, essa cor nem existe", "VERMELHO")
+                color_print("Esse fio não existe", "VERMELHO")
             elif selectedWire.cutted:
                 color_print("Esse fio já está cortado", "VERMELHO")
             else:
                 selectedWire.cut()  # Corta o fio escolhido
 
                 if selectedWire.isCorrectWire:
-                    color_print("Boa lek, acertou", "VERDE")
+                    color_print("Você cortou o fio correto", "VERDE")
                     self.wiresCompleted = True  # Marca a bomba como desarmada
                     break  # Sai do loop, pois a bomba foi desarmada
                 else:
-                    color_print("Porra lek, errou", "VERMELHO")
+                    color_print("Você cortou o fio incorreto", "VERMELHO")
 
             # Mostra os fios após cada interação
             self.show_wires()
 
-    # Método para inicializar os fios da bomba
+    # Método para configurar os fios da bomba
     def initialize_wires(self):
         wires_amount = randint(3, 4)  # Define a quantidade de fios (entre 3 e 4)
         wires_colors = ["VERDE", "AZUL", "AMARELO", "VERMELHO"]  # Cores possíveis dos fios
@@ -92,11 +94,10 @@ class Bomb:
         for i in range(5):  # Exibe os fios 5 vezes para simular um efeito visual
             row = ""
             for wire in self.wires.values():
-                if wire.cutted == True and i == 2:
+                if wire.cutted and i == 2:  # Mostra o fio cortado de forma diferente
                     row += f'{colors["NEGRITO"]} {wire.colorCode}  {colors["BRANCO"]}'
                 else:
                     row += f'{colors["NEGRITO"]} {wire.colorCode}| {colors["BRANCO"]}'
-
             print(row)
 
 # Início do programa
