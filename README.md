@@ -56,8 +56,6 @@ git commit -m "mensagem explicando o que foi feito"
 ```
 ## 🌿 Criando uma nova branch
 
-Para criar uma nova branch no seu repositório local, você pode usar o comando abaixo:
-
 ```bash
 git checkout -b nome-da-nova-branch
 ```
