@@ -10,3 +10,6 @@ colors = {
     'NEGRITO': '\033[1m',
     'SUBLINHADO': '\033[4m',
 }
+
+def color_print(text, color_name):
+    print(f"{colors[color_name]}{text}{colors["BRANCO"]}")
