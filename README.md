@@ -54,6 +54,13 @@ python nome_do_arquivo.py
 git add .
 git commit -m "mensagem explicando o que foi feito"
 ```
+## 🌿 Criando uma nova branch
+
+Para criar uma nova branch no seu repositório local, você pode usar o comando abaixo:
+
+```bash
+git checkout -b nome-da-nova-branch
+```
 
 ### 📤 Enviar (push) para o GitHub
 
@@ -61,8 +68,8 @@ Conecte o projeto local ao repositório remoto (caso ainda não tenha feito isso
 
 ```bash
 git remote add origin https://github.com/PauloKT/Timer-Z3R0.git
-git branch -M main
-git push -u origin main
+git branch -M
+git push -u origin
 ```
 
 ### 📥 Atualizar seu projeto local (pull)
