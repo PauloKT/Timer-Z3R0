@@ -61,13 +61,20 @@ class WiresChallenge(BaseChallenge):
     def determine_correct_wire_index(self):
         num_wires = len(self.wires)
         serial_last_digit = int(self.serial_number[-1])
-        colors_list = [wire.colorName for wire in self.wires]
+
+        colors_list = []
+        for wire in self.wires:
+            colors_list.append(wire.colorName)
 
         def count(color):
             return colors_list.count(color)
 
         def indexes_of(color):
-            return [i for i, c in enumerate(colors_list) if c == color]
+            result = []
+            for i, c in enumerate(colors_list):
+                if c == color:
+                    result.append(i)
+            return result
 
         def last_wire():
             return self.wires[-1].colorName
@@ -186,5 +193,9 @@ class WiresChallenge(BaseChallenge):
             print(row)
 
         # Mostrar número e nome da cor abaixo
-        labels = [f"{i+1}-{wire.colorName}" for i, wire in enumerate(self.wires)]
+        
+        labels = []
+        for i, wire in enumerate(self.wires):
+            labels.append(f"{i+1}-{wire.colorName}")
+
         print("\n" + "  ".join(label.center(12) for label in labels))

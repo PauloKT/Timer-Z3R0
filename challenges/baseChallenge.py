@@ -3,7 +3,6 @@
 class BaseChallenge():
     def __init__(self, debugMode):
         self.debugMode = debugMode
-        print(debugMode)
         self.completed = False  # Indica se o desafio foi concluído
 
     def start(self):
