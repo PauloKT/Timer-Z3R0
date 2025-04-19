@@ -61,11 +61,11 @@ class Bomb:
                 selectedWire.cut()  # Corta o fio escolhido
 
                 if selectedWire.isCorrectWire:
-                    color_print("Boa lek, acertou", "VERDE")
+                    color_print("Parabéns você acertou!", "VERDE")
                     self.wiresCompleted = True  # Marca a bomba como desarmada
                     break  # Sai do loop, pois a bomba foi desarmada
                 else:
-                    color_print("Porra lek, errou", "VERMELHO")
+                    color_print("Puts você errou!", "VERMELHO")
 
             # Mostra os fios após cada interação
             self.show_wires()

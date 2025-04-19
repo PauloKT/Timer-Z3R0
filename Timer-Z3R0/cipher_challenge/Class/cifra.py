@@ -1,10 +1,20 @@
-class cifradeCesar:
-    def __init__(self, chave):
-        self.chave = chave
+from random import randint
+from time import sleep
+from os import system
 
-    def decifrar(self, texto): 
-        textoDecifrado = self.transformar(texto, self.chave)
-        print(f"Texto descriptografado: {textoDecifrado}")
+class cifradeCesar:
+    def __init__(self):
+        self.palavras_originais = ["bomba", "fiovermelho", "timerzero", "paulo", "guilherme", "fabinho", "dancarino", "emo", "katto", "café"]
+        self.palavras_cifrada = []
+        self.rotações = []
+        self.gerar_cifras = ()
+
+    def gerar_cifras(self):
+        for palavras in self.palavras_originais:
+            rotação = randint(1, 25)
+            cifra = self.cifrar(palavras, rotação)
+            self.palavras_cifrada.append(cifra)
+            self.rotações.append(rotação)
 
     def transformar(self, texto, deslocamento):
         resultado = ''
