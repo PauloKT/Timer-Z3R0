@@ -12,7 +12,6 @@ class Wire:
         self.isCorrectWire = False
 
     def cut(self):
-        # Simula o movimento da tesoura cortando o fio
         for i in range(5):
             clear()
             print("Cortando fio... \n")
@@ -21,73 +20,171 @@ class Wire:
                 print(f'{colors["NEGRITO"]} {self.colorCode}|{colors["BRANCO"]}')
             sleep(0.5)
 
-        # Após a animação, o fio é cortado
         clear()
         print(f"Fio {colors['NEGRITO']}{self.colorCode}{self.colorName}{colors['BRANCO']} cortado!")
-        self.cutted = True  # Marca o fio como cortado
+        self.cutted = True
         sleep(1)
         return self
 
+
 class WiresChallenge(BaseChallenge):
-    def __init__(self):
-        super().__init__()
-        self.wires = {}
+    def __init__(self, debugMode):
+        super().__init__(debugMode)
+        self.wires = []
+        self.serial_number = self.generate_serial_number()
+
+    def generate_serial_number(self):
+        return f"SN{randint(1000, 9999)}"
+
+    def generate_balanced_colors(self, amount, available_colors):
+        wires = []
+        max_per_color = 2
+        color_count = {}
+
+        while len(wires) < amount:
+            color = choice(available_colors)
+            count = color_count.get(color, 0)
+
+            if count < max_per_color:
+                wires.append(Wire(color))
+                color_count[color] = count + 1
+
+        return wires
 
     def initialize_wires(self):
-        wires_amount = randint(3, 4)  # Define a quantidade de fios (entre 3 e 4)
-        wires_colors = ["VERDE", "AZUL", "AMARELO", "VERMELHO"]  # Cores possíveis dos fios
-        shuffle(wires_colors)  # Embaralha as cores
+        wires_amount = randint(3, 6)
+        possible_colors = ["VERMELHO", "AZUL", "AMARELO", "VERDE", "BRANCO", "PRETO"]
+        self.wires = self.generate_balanced_colors(wires_amount, possible_colors)
+        correct_index = self.determine_correct_wire_index()
+        self.wires[correct_index].isCorrectWire = True
 
-        # Cria os fios com base na quantidade definida
-        for color in wires_colors[:wires_amount]:
-            self.wires[color] = Wire(color)
+    def determine_correct_wire_index(self):
+        num_wires = len(self.wires)
+        serial_last_digit = int(self.serial_number[-1])
+        colors_list = [wire.colorName for wire in self.wires]
 
-        # Escolhe aleatoriamente o fio correto
-        wire = self.wires[choice(wires_colors)]
-        wire.isCorrectWire = True  # Marca o fio como o correto
+        def count(color):
+            return colors_list.count(color)
 
-        # Exibe uma mensagem de teste para identificar o fio correto (apenas para debug)
-        color_print(f"[TESTE] O fio que precisa ser cortado é o {wire.colorName}", wire.colorName)
+        def indexes_of(color):
+            return [i for i, c in enumerate(colors_list) if c == color]
+
+        def last_wire():
+            return self.wires[-1].colorName
+        
+        self.debugPrint(f"Fios: {colors_list}")
+        self.debugPrint(f"Último dígito do serial: {serial_last_digit}")
+
+        def condition_3_wires():
+            if count("VERMELHO") == 0:
+                self.debugPrint("✔️ Nenhum fio vermelho → cortar o 2º fio")
+                return 1
+            elif last_wire() == "BRANCO":
+                self.debugPrint("✔️ Último fio é branco → cortar o último fio")
+                return num_wires - 1
+            elif count("AZUL") > 1:
+                self.debugPrint("✔️ Mais de um fio azul → cortar o último azul")
+                return indexes_of("AZUL")[-1]
+            else:
+                self.debugPrint("✔️ Nenhuma outra condição → cortar o último fio")
+                return num_wires - 1
+
+        def condition_4_wires():
+            if count("VERMELHO") > 1 and serial_last_digit % 2 == 1:
+                self.debugPrint("✔️ Mais de um vermelho e serial ímpar → cortar o último vermelho")
+                return indexes_of("VERMELHO")[-1]
+            elif last_wire() == "AMARELO" and count("VERMELHO") == 0:
+                self.debugPrint("✔️ Último fio é amarelo e não há vermelhos → cortar o 1º fio")
+                return 0
+            elif count("AZUL") == 1:
+                self.debugPrint("✔️ Exatamente um fio azul → cortar o 1º fio azul")
+                return indexes_of("AZUL")[0]
+            elif count("AMARELO") > 1:
+                self.debugPrint("✔️ Mais de um fio amarelo → cortar o último amarelo")
+                return indexes_of("AMARELO")[-1]
+            else:
+                self.debugPrint("✔️ Nenhuma outra condição → cortar o 2º fio")
+                return 1
+
+        def condition_5_wires():
+            if last_wire() == "PRETO" and serial_last_digit % 2 == 1:
+                self.debugPrint("✔️ Último fio é preto e serial ímpar → cortar o 4º fio")
+                return 3
+            elif count("VERMELHO") == 1 and count("AMARELO") > 1:
+                self.debugPrint("✔️ Um vermelho e mais de um amarelo → cortar o 1º fio")
+                return 0
+            elif count("PRETO") == 0:
+                self.debugPrint("✔️ Nenhum fio preto → cortar o 2º fio")
+                return 1
+            else:
+                self.debugPrint("✔️ Nenhuma outra condição → cortar o 1º fio")
+                return 0
+
+        def condition_6_wires():
+            if count("AMARELO") == 0 and serial_last_digit % 2 == 1:
+                self.debugPrint("✔️ Nenhum amarelo e serial ímpar → cortar o 3º fio")
+                return 2
+            elif count("AMARELO") == 1 and count("BRANCO") > 1:
+                self.debugPrint("✔️ Um amarelo e mais de um branco → cortar o 4º fio")
+                return 3
+            elif count("VERMELHO") == 0:
+                self.debugPrint("✔️ Nenhum vermelho → cortar o último fio")
+                return num_wires - 1
+            else:
+                self.debugPrint("✔️ Nenhuma outra condição → cortar o 4º fio")
+                return 3
+
+        wire_rules = {
+            3: condition_3_wires,
+            4: condition_4_wires,
+            5: condition_5_wires,
+            6: condition_6_wires
+        }
+
+        if num_wires in wire_rules:
+            return wire_rules[num_wires]()
+
+        self.debugPrint("⚠️ Nenhuma regra encontrada → retornando o primeiro fio como padrão")
+        return 0
 
     def start(self):
-        self.initialize_wires()  # Configura os fios da bomba
-        self.show_wires()  # Mostra os fios no terminal
+        self.initialize_wires()
+        self.show_wires()
+
+        print(f"Número de série da bomba: {self.serial_number}\n")
 
         while not self.completed:
-            # Solicita ao jogador que escolha um fio para cortar
-            option = input("Qual fio você vai cortar?\nResposta: ").upper()
-            clear()
+            option = input("Qual fio você vai cortar?\nResposta: ")
 
-            # Verifica se o fio escolhido existe
-            selectedWire = None
-            for wire in self.wires.values():
-                if wire.colorName == option:
-                    selectedWire = wire
-                    break
+            if not option.isdigit() or not (1 <= int(option) <= len(self.wires)):
+                color_print("Entrada inválida. Digite um número válido do fio.", "VERMELHO")
+                continue
 
-            if not selectedWire:
-                color_print("Esse fio não existe", "VERMELHO")
-            elif selectedWire.cutted:
+            selectedWire = self.wires[int(option) - 1]
+
+            if selectedWire.cutted:
                 color_print("Esse fio já está cortado", "VERMELHO")
             else:
-                selectedWire.cut()  # Corta o fio escolhido
-
+                selectedWire.cut()
                 if selectedWire.isCorrectWire:
-                    color_print("Você cortou o fio correto", "VERDE")
-                    self.completed = True  # Marca a bomba como desarmada
-                    break  # Sai do loop, pois a bomba foi desarmada
+                    color_print("Você cortou o fio correto. Bomba desarmada! ✅", "VERDE")
+                    self.completed = True
+                    break
                 else:
-                    color_print("Você cortou o fio incorreto", "VERMELHO")
+                    color_print("Você cortou o fio incorreto!", "VERMELHO")
 
-            # Mostra os fios após cada interação
             self.show_wires()
 
     def show_wires(self):
-        for i in range(5):  # Exibe os fios 5 vezes para simular um efeito visual
+        for i in range(5):
             row = ""
-            for wire in self.wires.values():
-                if wire.cutted and i == 2:  # Mostra o fio cortado de forma diferente
+            for wire in self.wires:
+                if wire.cutted and i == 2:
                     row += f'{colors["NEGRITO"]} {wire.colorCode}  {colors["BRANCO"]}'
                 else:
                     row += f'{colors["NEGRITO"]} {wire.colorCode}| {colors["BRANCO"]}'
             print(row)
+
+        # Mostrar número e nome da cor abaixo
+        labels = [f"{i+1}-{wire.colorName}" for i, wire in enumerate(self.wires)]
+        print("\n" + "  ".join(label.center(12) for label in labels))
