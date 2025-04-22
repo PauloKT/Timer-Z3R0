@@ -6,7 +6,7 @@ if __name__ == "__main__":
     clear()
     print("Bem-vindo ao Timer-Z3R0!")
     while True:
-        bomb = Bomb(debugMode=True)
+        bomb = Bomb()
         bomb.start()
         print("Parabéns! Você desarmou a bomba!")
         sleep(1)

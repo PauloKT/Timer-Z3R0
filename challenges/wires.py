@@ -28,8 +28,8 @@ class Wire:
 
 
 class WiresChallenge(BaseChallenge):
-    def __init__(self, debugMode):
-        super().__init__(debugMode)
+    def __init__(self):
+        super().__init__()
         self.wires = []
         self.serial_number = self.generate_serial_number()
 
@@ -53,7 +53,7 @@ class WiresChallenge(BaseChallenge):
 
     def initialize_wires(self):
         wires_amount = randint(3, 6)
-        possible_colors = ["VERMELHO", "AZUL", "AMARELO", "VERDE", "BRANCO", "PRETO"]
+        possible_colors = ["VERMELHO", "AZUL", "AMARELO", "VERDE", "BRANCO", "ROXO"]
         self.wires = self.generate_balanced_colors(wires_amount, possible_colors)
         correct_index = self.determine_correct_wire_index()
         self.wires[correct_index].isCorrectWire = True
@@ -79,66 +79,46 @@ class WiresChallenge(BaseChallenge):
         def last_wire():
             return self.wires[-1].colorName
         
-        self.debugPrint(f"Fios: {colors_list}")
-        self.debugPrint(f"Último dígito do serial: {serial_last_digit}")
-
         def condition_3_wires():
             if count("VERMELHO") == 0:
-                self.debugPrint("✔️ Nenhum fio vermelho → cortar o 2º fio")
                 return 1
             elif last_wire() == "BRANCO":
-                self.debugPrint("✔️ Último fio é branco → cortar o último fio")
                 return num_wires - 1
             elif count("AZUL") > 1:
-                self.debugPrint("✔️ Mais de um fio azul → cortar o último azul")
                 return indexes_of("AZUL")[-1]
             else:
-                self.debugPrint("✔️ Nenhuma outra condição → cortar o último fio")
                 return num_wires - 1
 
         def condition_4_wires():
             if count("VERMELHO") > 1 and serial_last_digit % 2 == 1:
-                self.debugPrint("✔️ Mais de um vermelho e serial ímpar → cortar o último vermelho")
                 return indexes_of("VERMELHO")[-1]
             elif last_wire() == "AMARELO" and count("VERMELHO") == 0:
-                self.debugPrint("✔️ Último fio é amarelo e não há vermelhos → cortar o 1º fio")
                 return 0
             elif count("AZUL") == 1:
-                self.debugPrint("✔️ Exatamente um fio azul → cortar o 1º fio azul")
                 return indexes_of("AZUL")[0]
             elif count("AMARELO") > 1:
-                self.debugPrint("✔️ Mais de um fio amarelo → cortar o último amarelo")
                 return indexes_of("AMARELO")[-1]
             else:
-                self.debugPrint("✔️ Nenhuma outra condição → cortar o 2º fio")
                 return 1
 
         def condition_5_wires():
-            if last_wire() == "PRETO" and serial_last_digit % 2 == 1:
-                self.debugPrint("✔️ Último fio é preto e serial ímpar → cortar o 4º fio")
+            if last_wire() == "ROXO" and serial_last_digit % 2 == 1:
                 return 3
             elif count("VERMELHO") == 1 and count("AMARELO") > 1:
-                self.debugPrint("✔️ Um vermelho e mais de um amarelo → cortar o 1º fio")
                 return 0
-            elif count("PRETO") == 0:
-                self.debugPrint("✔️ Nenhum fio preto → cortar o 2º fio")
+            elif count("ROXO") == 0:
                 return 1
             else:
-                self.debugPrint("✔️ Nenhuma outra condição → cortar o 1º fio")
                 return 0
 
         def condition_6_wires():
             if count("AMARELO") == 0 and serial_last_digit % 2 == 1:
-                self.debugPrint("✔️ Nenhum amarelo e serial ímpar → cortar o 3º fio")
                 return 2
             elif count("AMARELO") == 1 and count("BRANCO") > 1:
-                self.debugPrint("✔️ Um amarelo e mais de um branco → cortar o 4º fio")
                 return 3
             elif count("VERMELHO") == 0:
-                self.debugPrint("✔️ Nenhum vermelho → cortar o último fio")
                 return num_wires - 1
             else:
-                self.debugPrint("✔️ Nenhuma outra condição → cortar o 4º fio")
                 return 3
 
         wire_rules = {
@@ -151,7 +131,6 @@ class WiresChallenge(BaseChallenge):
         if num_wires in wire_rules:
             return wire_rules[num_wires]()
 
-        self.debugPrint("⚠️ Nenhuma regra encontrada → retornando o primeiro fio como padrão")
         return 0
 
     def start(self):

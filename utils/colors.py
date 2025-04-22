@@ -3,7 +3,7 @@ colors = {
     'AZUL': '\033[94m',
     'AMARELO': '\033[93m',
     'VERMELHO': '\033[91m',
-    'MAGENTA': '\033[95m',
+    'ROXO': '\033[95m',
     'CIANO': '\033[96m',
     'BRANCO': '\033[0m',
     'PRETO': '\033[90m',

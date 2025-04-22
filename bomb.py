@@ -1,9 +1,9 @@
 from challenges.wires import WiresChallenge
 
 class Bomb:
-    def __init__(self, debugMode):
+    def __init__(self):
         self.challenges = [
-            WiresChallenge(debugMode),
+            WiresChallenge(),
             # Outros desafios
         ]
 
