@@ -31,18 +31,16 @@ class CesarCypherChallenge:
             if not tentativa.isdigit():
                 color_print("❗Digite um número válido!\n", 'VERMELHO')
                 continue
-            
+
             tentativa = int(tentativa)
 
             if tentativa < 1 or tentativa > 25:
                 color_print("⛔ Número fora do intervalo (1 a 25)!\n", 'VERMELHO')
                 continue
-            
+            clear()
+
             palavra_tentativa = self.cifrar(palavra_cifrada, -tentativa)
             color_print(f"🧠 Descriptografado com rotação {tentativa}: {palavra_tentativa}", 'CIANO')
-
-            clear()
-            
             color_print(f"\🔐 Cifra recebida: {palavra_cifrada}", 'AMARELO', True)
             color_print("🔎 Descubra a rotação correta (1 a 25)", 'AZUL')
             color_print("⚠️  A cada erro, 1 minuto será perdido!", 'VERMELHO')
@@ -50,7 +48,7 @@ class CesarCypherChallenge:
 
             if tentativa == rotacao_correta:
                 color_print(f"\n✅ Sucesso! A rotação correta era {rotacao_correta}.", 'VERDE', True)
-                sleep(3)
+                sleep(5)
                 break
             else:
                 tempo_bomba -= 1
