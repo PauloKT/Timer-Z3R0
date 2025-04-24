@@ -1,63 +1,94 @@
 import random
 import time
 
+from utils.colors import colors, color_print
+
 class ButtonChallenge:
-    def __init__(self):
+    def __init__(self, bomb):
+        self.bomb = bomb
+        self.bomb_name = bomb.name
         self.number = random.randint(1, 10)
-        self.bomb_name = "TNT"
         self.secret_number = random.randint(1, 10)
+        self.attempts = 0
+
+    def dramatic_print(self, text, color='BRANCO', delay=0.05):
+        for char in text:
+            print(f"{colors[color]}{char}{colors['BRANCO']}", end='', flush=True)
+            time.sleep(delay)
+        print()
 
     def show_button(self):
-        print("\n--- DESAFIO DO BOTÃO ---")
+        color_print("\n--- DESAFIO DO BOTÃO ---", "NEGRITO")
         if self.number < 3:
             print(f'''      ______________________
      |                      |
-     |    PRESS TO DEFUSE   |
+     | {colors['VERDE']} PRESS TO DEFUSE {colors['BRANCO']}  |
      |______________________|  ({self.number} vezes)''')
 
         elif self.number == 4:
             print(f'''      ______________________
      |                      |
-     |  TWO CLICK TO DISARM |
+     | {colors['AMARELO']} SPECIAL TNT - AUTH REQUIRED {colors['BRANCO']} |
      |______________________|  ({self.number} vezes)''')
 
         else:
             print(f'''      ______________________
      |                      |
-     |    CLICK TO DISARM   |
+     | {colors['VERMELHO']} HIGH RISK BOMB - GUESS CODE {colors['BRANCO']} |
      |______________________|  ({self.number} segundos)''')
+
+    def explosion(self):
+        color_print("!!! BOOM !!!", "VERMELHO")
+        self.dramatic_print("A bomba explodiu... Missão fracassada.", "VERMELHO")
+
+    def success(self):
+        self.dramatic_print("Desarmando...", "AZUL", 0.1)
+        time.sleep(self.number)
+        color_print("✔ Bomba desarmada com sucesso!", "VERDE")
 
     def start(self):
         self.show_button()
+        time.sleep(1)
 
         if self.number <= 3:
-            print(f"Você precisa pressionar o botão {self.number} vezes.")
-            time.sleep(self.number)
-            print("Bomba desarmada!")
+            color_print(f"Pressione o botão {self.number} vezes corretamente para desarmar!", "CIANO")
+            for i in range(self.number):
+                input(f"Pressione o botão #{i+1}: ")
+                color_print("Clique registrado!", "AZUL")
+            self.success()
 
         elif self.number == 4:
-            print(f"Você precisa pressionar o botão {self.number} vezes.")
+            color_print("Essa é uma TNT especial. Requer autenticação secreta!", "AMARELO")
             time.sleep(1)
-            print("Essa bomba é uma TNT especial, ela exige uma frase secreta!")
-
             while True:
-                resposta = input("Digite o nome da bomba e o valor de Pi (ex: TNT 3.14): ").strip().lower()
-                if resposta == "tnt 3.14":
-                    print(f"Pressione o botão por {self.number} segundos.")
-                    time.sleep(self.number)
-                    print("Bomba desarmada!")
+                resposta = input("Digite a senha secreta (nome da bomba + valor de Pi): ").strip().lower()
+                if resposta == f"{self.bomb_name} 3.14":
+                    color_print("Acesso concedido.", "VERDE")
+                    self.success()
                     break
                 else:
-                    print("Frase incorreta! Tente novamente.")
+                    self.attempts += 1
+                    color_print("Senha incorreta!", "VERMELHO")
+                    if self.attempts >= 3:
+                        self.explosion()
+                        break
 
         else:
-            print(f"Essa é uma bomba especial. Tente adivinhar o número secreto entre 1 e 10.")
+            color_print("Esta bomba requer um código secreto!", "VERMELHO")
             while True:
-                tentativa = int(input("Adivinhe o número: "))
+                try:
+                    tentativa = int(input("Adivinhe o número secreto entre 1 e 10: "))
+                except ValueError:
+                    color_print("Entrada inválida! Digite um número.", "AMARELO")
+                    continue
+
                 if tentativa == self.secret_number:
-                    print(f"Pressione o botão por {self.number} segundos.")
-                    time.sleep(self.number)
-                    print("Bomba desarmada!")
+                    color_print("Código aceito!", "VERDE")
+                    self.success()
                     break
                 else:
-                    print("Número incorreto! Tente novamente.")
+                    self.attempts += 1
+                    color_print("Número incorreto!", "VERMELHO")
+                    if self.attempts >= 5:
+                        self.explosion()
+                        break

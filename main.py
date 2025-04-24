@@ -8,6 +8,8 @@ if __name__ == "__main__":
     clear()
     print(f"Bem-vindo ao\n{arte_timer_z3r0}")
     
+    input("Envie qualquer caractere para começar o desafio")
+    
     bomb = Bomb()
     sucesso = bomb.start()
     

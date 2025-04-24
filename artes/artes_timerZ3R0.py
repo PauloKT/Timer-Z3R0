@@ -50,7 +50,3 @@ arte_bomba = '''
 ⠀⠀⠀⠀⠀⠀⠈⠛⠷⣦⣀⡉⠉⠉⠉⠛⠿⠛⠛⠛⢃⣁  ⣤⡶⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠛⠳⠶⠶⠶⠶⠶⠶⠾⠛⠛⠉⠁⠀⠀⠀⠀⠀⠀
 '''
-
-print(arte_timer_z3r0)
-print(arte_bomba)
-print(arte_sucesso)

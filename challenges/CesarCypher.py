@@ -3,7 +3,8 @@ from time import sleep
 from utils.helpers import clear
 
 class CesarCypherChallenge:
-    def __init__(self):
+    def __init__(self, bomb):
+        self.bomb = bomb
         self.palavras_originais = ["bomba", "katto", "banguela", "gatão", "dancarino", "fiovermelho", "timerzero"]
         self.palavras_cifradas = []
         self.rotações = []
@@ -14,7 +15,7 @@ class CesarCypherChallenge:
         self.gerar_cifras()
         tempo_bomba = 10
 
-        i = randint(0, 7)
+        i = randint(0, len(self.palavras_originais))
         palavra_cifrada = self.palavras_cifradas[i]
         rotacao_correta = self.rotações[i]
 
