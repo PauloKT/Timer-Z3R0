@@ -11,5 +11,8 @@ colors = {
     'SUBLINHADO': '\033[4m',
 }
 
-def color_print(text, color_name):
-    print(f"{colors[color_name]}{text}{colors["BRANCO"]}")
+def color_print(text, color_name='BRANCO', bold=False):
+    prefix = colors[color_name]
+    if bold:
+        prefix += colors['NEGRITO']
+    print(f"{prefix}{text}{colors['BRANCO']}")

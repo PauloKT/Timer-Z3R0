@@ -176,9 +176,7 @@ class WiresChallenge():
         
         color_print("=== DESAFIO DOS FIOS ===", "NEGRITO")
         color_print("Você está prestes a encarar o módulo de fios explosivo!", "CIANO")
-        color_print("Se quiser ver o guia antes de começar, digite: ", "BRANCO")
-        color_print("Guia", "AMARELO")
-        color_print("e pressione Enter.", "BRANCO")
+        print(f"Se quiser ver o guia antes de começar, digite: {colors["AMARELO"]}Guia {colors["BRANCO"]}e pressione Enter.\n")
         
         resposta = input("> ")
         
@@ -187,7 +185,7 @@ class WiresChallenge():
         if resposta.lower() == "guia":
             self.show_guide()
             
-        color_print("\nPreparando o módulo de fios...", "AZUL")
+        color_print("\nPreparando o módulo de fios...\n\n", "AZUL")
         sleep(3)
 
         self.initialize_wires()
@@ -198,7 +196,7 @@ class WiresChallenge():
         completed = False
 
         while not completed:
-            option = input("Qual fio você vai cortar?\> ")
+            option = input("Qual fio você vai cortar?\n> ")
 
             if not option.isdigit() or not (1 <= int(option) <= len(self.wires)):
                 color_print("Entrada inválida. Digite um número válido do fio.", "VERMELHO")

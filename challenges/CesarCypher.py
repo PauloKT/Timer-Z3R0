@@ -1,6 +1,7 @@
 from random import randint
 from time import sleep
 from utils.helpers import clear
+from utils.colors import colors, color_print
 
 class CesarCypherChallenge:
     def __init__(self, bomb):
@@ -10,50 +11,66 @@ class CesarCypherChallenge:
         self.rotações = []
 
     def start(self):
+        
         clear()
-
         self.gerar_cifras()
         tempo_bomba = 10
 
-        i = randint(0, len(self.palavras_originais))
+        i = randint(0, len(self.palavras_originais) - 1)
         palavra_cifrada = self.palavras_cifradas[i]
         rotacao_correta = self.rotações[i]
-
-        print("========= TIMER Z3R0 =========")
-        print(f"\nA cifra é : {palavra_cifrada}")
-        print("Você precisa descobrir a rotção correta de 1 a 25")
-        print("A cada erro, 1 minuto será removido do tempo da bomba")
-        print("==============================\n")
+        
+        color_print(f"\n🔐 Cifra recebida: {palavra_cifrada}", 'AMARELO', True)
+        color_print("🔎 Descubra a rotação correta (1 a 25)", 'AZUL')
+        color_print("⚠️  A cada erro, 1 minuto será perdido!", 'VERMELHO')
+        color_print("===========================================\n", 'CIANO')
 
         while True:
-            tentativa =  input("Digite o numero de rotações: ")
+            
+            tentativa = input(f"{colors['NEGRITO']}Digite o número de rotações: {colors['BRANCO']}\n> ")
+            if not tentativa.isdigit():
+                color_print("❗Digite um número válido!\n", 'VERMELHO')
+                continue
+            
             tentativa = int(tentativa)
 
             if tentativa < 1 or tentativa > 25:
-                print("Digite um número válido!\n")
+                color_print("⛔ Número fora do intervalo (1 a 25)!\n", 'VERMELHO')
+                continue
+            
+            palavra_tentativa = self.cifrar(palavra_cifrada, -tentativa)
+            color_print(f"🧠 Descriptografado com rotação {tentativa}: {palavra_tentativa}", 'CIANO')
+
+            clear()
+            
+            color_print(f"\🔐 Cifra recebida: {palavra_cifrada}", 'AMARELO', True)
+            color_print("🔎 Descubra a rotação correta (1 a 25)", 'AZUL')
+            color_print("⚠️  A cada erro, 1 minuto será perdido!", 'VERMELHO')
+            color_print("===========================================\n", 'CIANO')
 
             if tentativa == rotacao_correta:
-                print(f"\nSucesso! A rotação correta er {rotacao_correta}")
+                color_print(f"\n✅ Sucesso! A rotação correta era {rotacao_correta}.", 'VERDE', True)
+                sleep(3)
                 break
             else:
-                
-                distancia = abs(tentativa - rotacao_correta)
-                print("Você errou!\n")
-                
                 tempo_bomba -= 1
-                print(f"Você perdeu 1 minuto! Tempo restante {tempo_bomba} min.")
+                distancia = abs(tentativa - rotacao_correta)
+
+                color_print("\n❌ Rotação incorreta!", 'VERMELHO')
+                color_print(f"💣 Tempo restante: {tempo_bomba} minuto(s)", 'AMARELO')
+
                 if tempo_bomba <= 0:
-                    print("O tempo acabou!")
+                    color_print("💥 O tempo acabou! A bomba explodiu!", 'VERMELHO', True)
                     break
 
-                if distancia > 10:
-                    print("Você está MUITO longe do numero certo!\n")
-                elif distancia > 7:
-                    print("Você está quase chegando no numero correto!\n")
-                elif distancia > 4:
-                    print("Você está MUITO perto do numero certo!\n")
+                if distancia >= 10:
+                    color_print("📉 Você está MUITO longe da rotação correta!\n", 'VERMELHO')
+                elif 6 <= distancia <= 9:
+                    color_print("🔍 Você está chegando perto!\n", 'AMARELO')
+                elif 2 <= distancia <= 5:
+                    color_print("🔥 Muito perto!\n", 'CIANO')
                 elif distancia == 1:
-                    print("VOCÊ TA LITERALMENTE DO LADO DO NUMERO CERTO!!!\n")
+                    color_print("🚨 VOCÊ ESTÁ DO LADO DA RESPOSTA CERTA!!!\n", 'VERDE')
 
                 sleep(1)
 

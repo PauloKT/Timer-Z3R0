@@ -18,8 +18,8 @@ class Bomb:
         
         self.challenges = [
             CesarCypherChallenge(self),
-            WiresChallenge(self),
             ButtonChallenge(self),
+            WiresChallenge(self),
         ]
 
     def start(self):
