@@ -1,15 +1,22 @@
-from wires_challenge.wires import WiresChallenge
-from cipher_challenge.CesarCypher import cifradeCesar
+from challenges.Wires import WiresChallenge
+from challenges.CesarCypher import CesarCypherChallenge
+from challenges.Button import ButtonChallenge
+
+from utils.helpers import clear
+from time import sleep
 
 class Bomb:
     def __init__(self):
         self.challenges = [
-            cifradeCesar(),
             WiresChallenge(),
+            ButtonChallenge(),
+            CesarCypherChallenge(),
             # Outros desafios
         ]
 
     def start(self):
         for challenge in self.challenges:
             challenge.start()
-            print("Desafio concluído! Próximo desafio...")
+            clear()
+            print("Desafio concluído! Próximo desafio...\n")
+            sleep(2)

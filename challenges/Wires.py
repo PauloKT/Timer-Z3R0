@@ -169,11 +169,14 @@ class WiresChallenge():
                 else:
                     row += f'{colors["NEGRITO"]} {wire.colorCode}| {colors["BRANCO"]}'
             print(row)
-
-        # Mostrar número e nome da cor abaixo
+            
+        # Mostrar o número e o nome da cor de cada fio abaixo do visual
+        print("\n")
         
-        labels = []
+        labels = ""
+        
         for i, wire in enumerate(self.wires):
-            labels.append(f"{i+1}-{wire.colorName}")
+            formatted_text = f"{i + 1}-{wire.colorName}  "
+            labels = labels + formatted_text
 
-        print("\n" + "  ".join(label.center(12) for label in labels))
+        print(labels)
