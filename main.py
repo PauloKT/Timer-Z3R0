@@ -2,7 +2,7 @@ from bomb import Bomb
 from utils.helpers import clear
 from time import sleep
 
-from artes.artes_timerZ3R0 import arte_timer_z3r0, arte_sucesso
+from artes.artes_timerZ3R0 import arte_timer_z3r0, arte_sucesso, arte_explosion
 
 if __name__ == "__main__":
     clear()
@@ -18,3 +18,5 @@ if __name__ == "__main__":
         print(arte_sucesso)
     else:
         print("Deu ruim pae")
+        print(arte_explosion)
+        
