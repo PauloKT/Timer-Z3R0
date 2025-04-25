@@ -1,3 +1,10 @@
+# Dev's
+# Paulo Henrique Amaral Martins
+# Fabio Henrique Massucatto Sousa
+# José Guilherme Oliveira Martins
+
+
+
 from bomb import Bomb
 from utils.helpers import clear
 from utils.colors import colors, color_print
