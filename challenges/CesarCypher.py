@@ -14,12 +14,12 @@ class CesarCypherChallenge:
         
         clear()
         self.gerar_cifras()
-        tempo_bomba = 10
 
         i = randint(0, len(self.palavras_originais) - 1)
         palavra_cifrada = self.palavras_cifradas[i]
         rotacao_correta = self.rotações[i]
         
+        color_print("=== DESAFIO DA CIFRA DE CESAR ==", "NEGRITO")
         color_print(f"\n🔐 Cifra recebida: {palavra_cifrada}", 'AMARELO', True)
         color_print("🔎 Descubra a rotação correta (1 a 25)", 'AZUL')
         color_print("⚠️  A cada erro, 1 minuto será perdido!", 'VERMELHO')
@@ -49,17 +49,15 @@ class CesarCypherChallenge:
             if tentativa == rotacao_correta:
                 color_print(f"\n✅ Sucesso! A rotação correta era {rotacao_correta}.", 'VERDE', True)
                 sleep(5)
-                break
+                return True
             else:
-                tempo_bomba -= 1
                 distancia = abs(tentativa - rotacao_correta)
 
                 color_print("\n❌ Rotação incorreta!", 'VERMELHO')
-                color_print(f"💣 Tempo restante: {tempo_bomba} minuto(s)", 'AMARELO')
+                isOver = self.bomb.timer.removeTime(60)
 
-                if tempo_bomba <= 0:
-                    color_print("💥 O tempo acabou! A bomba explodiu!", 'VERMELHO', True)
-                    break
+                if isOver == True:
+                    return False
 
                 if distancia >= 10:
                     color_print("📉 Você está MUITO longe da rotação correta!\n", 'VERMELHO')

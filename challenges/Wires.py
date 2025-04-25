@@ -31,6 +31,54 @@ class WiresChallenge():
         self.bomb = bomb
         self.serial_number = bomb.serial_number
         self.wires = []
+
+    def start(self):
+        
+        color_print("\n=== DESAFIO DOS FIOS ===", "NEGRITO")
+        color_print("Você está prestes a encarar o módulo de fios explosivo!", "CIANO")
+        print(f"Se quiser ver o guia antes de começar, digite: {colors["AMARELO"]}Guia {colors["BRANCO"]}e pressione Enter.\n")
+        
+        resposta = input("> ")
+        
+        clear()
+        
+        if resposta.lower() == "guia":
+            self.show_guide()
+            
+        color_print("\nPreparando o módulo de fios...\n\n", "AZUL")
+        sleep(3)
+
+        self.initialize_wires()
+        self.show_wires()
+
+        print(f"Número de série da bomba: {self.serial_number}\n")
+        
+        while True:
+            option = input("Qual fio você vai cortar?\n> ")
+
+            if not option.isdigit() or not (1 <= int(option) <= len(self.wires)):
+                color_print("Entrada inválida. Digite um número válido do fio.", "VERMELHO")
+                continue
+
+            selectedWire = self.wires[int(option) - 1]
+
+            if selectedWire.cutted:
+                color_print("Esse fio já está cortado", "VERMELHO")
+                sleep(1)
+            else:
+                selectedWire.cut()
+                if selectedWire.isCorrectWire:
+                    color_print("Você cortou o fio correto ✅", "VERDE")
+                    sleep(1)
+                    return True
+                else:
+                    color_print("Você cortou o fio incorreto!", "VERMELHO")
+                    sleep(1)
+                    timeOver = self.bomb.timer.removeTime(120)
+                    if timeOver == True:
+                        return False
+
+            self.show_wires()
                 
     def show_guide(self):
         
@@ -171,51 +219,6 @@ class WiresChallenge():
             return wire_rules[num_wires]()
 
         return 0
-
-    def start(self):
-        
-        color_print("=== DESAFIO DOS FIOS ===", "NEGRITO")
-        color_print("Você está prestes a encarar o módulo de fios explosivo!", "CIANO")
-        print(f"Se quiser ver o guia antes de começar, digite: {colors["AMARELO"]}Guia {colors["BRANCO"]}e pressione Enter.\n")
-        
-        resposta = input("> ")
-        
-        clear()
-        
-        if resposta.lower() == "guia":
-            self.show_guide()
-            
-        color_print("\nPreparando o módulo de fios...\n\n", "AZUL")
-        sleep(3)
-
-        self.initialize_wires()
-        self.show_wires()
-
-        print(f"Número de série da bomba: {self.serial_number}\n")
-        
-        completed = False
-
-        while not completed:
-            option = input("Qual fio você vai cortar?\n> ")
-
-            if not option.isdigit() or not (1 <= int(option) <= len(self.wires)):
-                color_print("Entrada inválida. Digite um número válido do fio.", "VERMELHO")
-                continue
-
-            selectedWire = self.wires[int(option) - 1]
-
-            if selectedWire.cutted:
-                color_print("Esse fio já está cortado", "VERMELHO")
-            else:
-                selectedWire.cut()
-                if selectedWire.isCorrectWire:
-                    color_print("Você cortou o fio correto. Bomba desarmada! ✅", "VERDE")
-                    completed = True
-                    break
-                else:
-                    color_print("Você cortou o fio incorreto!", "VERMELHO")
-
-            self.show_wires()
 
     def show_wires(self):
         for i in range(5):
