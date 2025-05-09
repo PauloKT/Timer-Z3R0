@@ -3,8 +3,6 @@
 # Fabio Henrique Massucatto Sousa
 # José Guilherme Oliveira Martins
 
-
-
 from bomb import Bomb
 from utils.helpers import clear
 from utils.colors import colors, color_print
@@ -22,7 +20,7 @@ if __name__ == "__main__":
     for line in arte_timer_z3r0.strip().split("\n"):
         timer_part = line[:split_index]
         z3r0_part = line[split_index:]
-        print(f"{colors["VERMELHO"]}{timer_part}{colors["BRANCO"]}{z3r0_part}")
+        print(f"{colors['VERMELHO']}{timer_part}{colors['BRANCO']}{z3r0_part}")
     
     color_print("Envie qualquer coisa para começar o jogo", "AMARELO")
     input("> ")

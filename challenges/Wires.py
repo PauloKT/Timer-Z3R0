@@ -16,7 +16,7 @@ class Wire:
             print("Cortando fio... \n")
             print(f'{" " * (4 - i)}✂️')
             for _ in range(5):
-                print(f'{colors["NEGRITO"]} {self.colorCode}|{colors["BRANCO"]}')
+                print(f"{colors['NEGRITO']} {self.colorCode}|{colors['BRANCO']}")
             sleep(0.5)
 
         clear()
@@ -36,7 +36,7 @@ class WiresChallenge():
         
         color_print("\n=== DESAFIO DOS FIOS ===", "NEGRITO")
         color_print("Você está prestes a encarar o módulo de fios explosivo!", "CIANO")
-        print(f"Se quiser ver o guia antes de começar, digite: {colors["AMARELO"]}Guia {colors["BRANCO"]}e pressione Enter.\n")
+        print(f"Se quiser ver o guia antes de começar, digite: {colors['AMARELO']}Guia {colors['BRANCO']}e pressione Enter.\n")
         
         resposta = input("> ")
         
